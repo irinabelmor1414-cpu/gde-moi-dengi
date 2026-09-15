@@ -154,9 +154,24 @@
 
   /* ---------- формат ---------- */
   .format-list{list-style:none;margin:0 0 18px;padding:0;
-    display:flex;flex-direction:column;gap:11px}
-  .format-list li{position:relative;padding-left:34px;font-size:.94rem;line-height:1.42}
-  .format-list li i{position:absolute;left:0;top:-1px;font-style:normal;font-size:1.2rem}
+    display:flex;flex-direction:column;gap:12px}
+  .format-list li{position:relative;display:flex;align-items:center;gap:14px;
+    background:linear-gradient(165deg,#fff,var(--raised));
+    border:1px solid var(--line);border-radius:14px;padding:13px 16px;
+    box-shadow:0 14px 28px -18px rgba(41,41,41,.35),0 2px 6px -2px rgba(41,41,41,.1);
+    transition:opacity .6s cubic-bezier(.2,.7,.3,1),transform .6s cubic-bezier(.2,.7,.3,1),
+      box-shadow .25s ease,border-color .25s ease}
+  .format-list li:hover{transform:translateY(-3px) !important;border-color:var(--gold-lit);
+    box-shadow:0 20px 36px -18px rgba(41,41,41,.45),0 2px 6px -2px rgba(41,41,41,.12)}
+  .format-list li.pre-anim{opacity:0;transform:translateY(30px) scale(.96)}
+  .format-list li.pre-anim.in{opacity:1;transform:translateY(0) scale(1)}
+  .format-list li i{flex:none;width:44px;height:44px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;font-style:normal;font-size:1.28rem;
+    background:radial-gradient(120% 130% at 28% 22%,#fff8ec,var(--gold-soft) 42%,var(--gold-lit) 82%,var(--gold) 100%);
+    border:1px solid rgba(170,145,81,.4);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -3px 6px rgba(170,80,20,.16),
+      0 8px 14px -8px rgba(170,145,81,.6)}
+  .format-list li span{font-size:.94rem;line-height:1.4;font-weight:500}
   .format-note{border-left:1.5px solid var(--gold);padding-left:16px;
     font-size:.9rem;color:var(--muted);margin:0}
 
@@ -303,11 +318,11 @@
   <div class="shead"><h2>Формат</h2><span>как это устроено</span></div>
 
   <ul class="format-list">
-    <li><i>🎥</i>5 уроков в записи</li>
-    <li><i>📚</i>материалы для самостоятельной работы</li>
-    <li><i>⏱️</i>учитесь в удобное время и в своём темпе</li>
-    <li><i>🔓</i>доступ к урокам после оплаты</li>
-    <li><i>💬</i>без обратной связи и проверки домашних заданий</li>
+    <li><i>🎥</i><span>5 уроков в записи</span></li>
+    <li><i>📚</i><span>материалы для самостоятельной работы</span></li>
+    <li><i>⏱️</i><span>учитесь в удобное время и в своём темпе</span></li>
+    <li><i>🔓</i><span>доступ к урокам после оплаты</span></li>
+    <li><i>💬</i><span>без обратной связи и проверки домашних заданий</span></li>
   </ul>
   <p class="format-note">Это самостоятельный формат: открываете урок, изучаете материал, рассчитываете свою дату и сразу применяете знания.</p>
 
@@ -408,20 +423,27 @@
 })();
 
 (function(){
-  var items = document.querySelectorAll('.system-grid li');
-  if(!items.length || !('IntersectionObserver' in window)) return;
-  items.forEach(function(it, i){
-    it.classList.add('pre-anim');
-    it.style.transitionDelay = (i * 110) + 'ms';
-  });
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.classList.add('in');
-        obs.unobserve(entry.target);
-      }
+  if(!('IntersectionObserver' in window)) return;
+
+  function animateGroup(selector, stepMs){
+    var items = document.querySelectorAll(selector);
+    if(!items.length) return;
+    items.forEach(function(it, i){
+      it.classList.add('pre-anim');
+      it.style.transitionDelay = (i * stepMs) + 'ms';
     });
-  }, {threshold:.25, rootMargin:'0px 0px -40px 0px'});
-  items.forEach(function(it){ obs.observe(it); });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.2, rootMargin:'0px 0px -60px 0px'});
+    items.forEach(function(it){ obs.observe(it); });
+  }
+
+  animateGroup('.system-grid li', 110);
+  animateGroup('.format-list li', 100);
 })();
 </script>
