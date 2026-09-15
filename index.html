@@ -226,7 +226,7 @@
 
   /* ---------- встроенный виджет оплаты (Татьяны) ---------- */
   .pay-widget{background:var(--surface);border:1px solid var(--line);border-radius:14px;
-    padding:6px;overflow:hidden;box-shadow:var(--shadow-1)}
+    padding:6px;overflow:hidden;box-shadow:var(--shadow-1);margin-top:12px}
 
   /* ---------- портрет-разбивка между разделами ---------- */
   .portrait-break{position:relative;border-radius:16px;overflow:hidden;
@@ -380,9 +380,8 @@
       <li>навык самостоятельного расчёта себя и своих близких</li>
     </ul>
 
-    <div class="pay-widget">
-      <script ao-number="117712" ao-widget-id="v_x0H8NagUWds_ka1nmnJA" src="https://idx.xl.ru/site/widget/widget.min.js"></script>
-    </div>
+    <button type="button" class="btn" id="pay-open">Оплатить участие <span class="ar">→</span></button>
+    <div class="pay-widget" id="pay-widget-slot" hidden></div>
     <p class="after">Специальная цена действует по таймеру выше — обратный отсчёт запускается при первом заходе на страницу.</p>
   </div>
 
@@ -467,6 +466,21 @@
 
   animateGroup('.system-grid li', 80);
   animateGroup('.format-list li', 75);
+})();
+
+(function(){
+  var btn = document.getElementById('pay-open');
+  var slot = document.getElementById('pay-widget-slot');
+  if(!btn || !slot) return;
+  btn.addEventListener('click', function(){
+    btn.style.display = 'none';
+    slot.hidden = false;
+    var s = document.createElement('script');
+    s.setAttribute('ao-number', '117712');
+    s.setAttribute('ao-widget-id', 'v_x0H8NagUWds_ka1nmnJA');
+    s.src = 'https://idx.xl.ru/site/widget/widget.min.js';
+    slot.appendChild(s);
+  });
 })();
 </script>
 
